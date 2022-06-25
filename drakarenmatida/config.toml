@@ -1,0 +1,74 @@
+baseurl = "https://drakarenmatida.com" # Hostname (and path) to the root.
+title = "Dra. Karen Tamae Matida" # Site title.
+theme = "coder-portfolio" # Set the theme.
+languagecode = "en" # The site’s language code used to generate RSS.
+defaultcontentlanguage = "en" # The default content language.
+
+paginate = 20 # Default number of pages per page in pagination.
+
+pygmentsstyle = "b2" # Color-theme or style for syntax highlighting.
+pygmentscodefences = true # Enable code fence background highlighting.
+pygmentscodefencesguesssyntax = true # Enable syntax guessing for code fences without specified language.
+pygmentsUseClasses = true # new add
+
+disqusShortname = "yourdiscussshortname" # Enable or disable Disqus.
+
+[params] # theme parameters
+    author = "Dra. Karen Tamae Matida" # Author's name.
+    info = "Clínico Geral e Endocrinologia e Metabologia" # Author's job title or info.
+    description = "Dra. Karen Tamae Matida's personal website" # Site description.
+    keywords = "blog,developer,personal" # Site keywords.
+    avatarurl = "https://cdn.boaconsulta.com/uploads/doctor/photo/61a9160f8305640068000eff/thumb_square_15d3c874ec2779daba83ec4fa88a2cd654d978a96e280b719b8a67bf64a31a3f.png?commit=6542ee9%0A" # Contain the path of the optionnal avatar in the static folder.
+
+    footercontent = "Enter a text here." # Add footer content
+    fixedbarContentAfter = "Thank You! Please share it if you like it→" # Add fixedbar content after click
+
+    # Whether you want to hide copyright and credits in the footer.
+    hideCredits = false
+    hideCopyright = false
+
+    # Custom CSS
+    custom_css = []
+
+    # Alignment of Mobile Menu items
+    itemscentered = true
+
+    # RTL support
+    rtl = false
+
+    # Bottom sns share
+    snsShare = true # new add
+    # Popular sns share
+    # if you want add sns. please message!
+    enableTwitterShare = false  # new add
+    enableFacebookShare = false # new add
+    enableHatenaShare = false   # new add
+    enableLineShare = false     # new add
+    enableLinkedInShare = false # new add
+
+    thumbnail = "images/tn.png" # default sns thumbnail
+
+    # Multilanguage mode
+    langseparator = "|" # Separates menus from language selectors when site is multilingual.
+
+# Social links
+[[params.social]]
+    name = "Boa Consulta"
+    icon = "fab fa-github"
+    weight = 1
+    url = "https://www.boaconsulta.com/especialista/karen-tamae-matida-61a9160f8305640068000eff"
+[[params.social]]
+    name = "LinkedIn"
+    icon = "fab fa-linkedin"
+    weight = 3
+    url = "https://www.linkedin.com/in/karen-matida"
+
+# Menu links
+[[menu.main]]
+    name = "Consultas"
+    weight = 1
+    url  = "https://www.boaconsulta.com/especialista/karen-tamae-matida-61a9160f8305640068000eff"
+[[menu.main]]
+    name = "Sobre"
+    weight = 2
+    url = "Sobre"
