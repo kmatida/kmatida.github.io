@@ -67,7 +67,7 @@ disqusShortname = "yourdiscussshortname" # Enable or disable Disqus.
 [[menu.main]]
     name = "Consultas"
     weight = 1
-    url  = "https://www.boaconsulta.com/especialista/karen-tamae-matida-61a9160f8305640068000eff"
+    url  = "https://www.doctoralia.com.br/karen-matida/especialista-em-clinica-medica-endocrinologista/indaiatuba"
 [[menu.main]]
     name = "Sobre"
     weight = 2
