@@ -39,37 +39,20 @@ jobs:
           submodules: false
           fetch-depth: 0
       
-      # Security: Pin theme to specific commit and apply patches
-      - name: Setup theme with security patches
+      # Setup theme (simplified - using local overrides)
+      - name: Setup theme
         run: |
           # Clone theme from official repository
           git clone https://github.com/naro143/hugo-coder-portfolio.git themes/coder-portfolio
           
-          # Apply security and compatibility patches
+          # Apply only critical security fixes to theme files
           cd themes/coder-portfolio
           
           # Fix deprecated Hugo functions (security: prevent build failures)
           sed -i 's/\.Site\.IsMultiLingual/hugo.IsMultilingual/g' layouts/partials/header.html
           sed -i 's/\.Site\.LastChange/\.Site\.Lastmod/g' layouts/partials/footer.html
           
-          # Debug: Show original home.html content
-          echo "=== Original home.html ==="
-          cat layouts/partials/home.html
-          
-          # Add CRM information to home template (using more reliable approach)
-          cp layouts/partials/home.html layouts/partials/home.html.bak
-          sed -i '/<h2>{{ \.Site\.Params\.info }}<\/h2>/a\    <p class="crm-info">CRM SP 173359 | RQE 140829</p>' layouts/partials/home.html
-          
-          # Debug: Show modified home.html content
-          echo "=== Modified home.html ==="
-          cat layouts/partials/home.html
-          
-          # Add CRM styling (minified for performance)
-          echo '.centered .about .crm-info{margin-top:0.5rem;margin-bottom:1.0rem;font-size:1.2rem;color:#000}@media only screen and (min-device-width:320px) and (max-device-width:480px){.centered .about .crm-info{font-size:1.0rem}}' >> static/css/style.min.css
-          
-          # Debug: Verify CSS was added
-          echo "=== CSS with CRM styling ==="
-          tail -1 static/css/style.min.css
+          echo "Theme setup complete - using local template overrides for customizations"
       
       - name: Setup Pages
         id: pages
