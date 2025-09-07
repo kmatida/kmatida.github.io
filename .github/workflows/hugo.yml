@@ -2,8 +2,8 @@ name: Deploy Hugo site to Pages
 
 on:
   push:
-    branches:
-      - main
+    branches: ["main"]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -21,23 +21,35 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.149.1
     steps:
       - name: Install Hugo CLI
         run: |
-          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v0.149.1/hugo_extended_0.149.1_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb          
       - name: Install Dart Sass
         run: sudo snap install dart-sass
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: recursive
+          submodules: false
           fetch-depth: 0
+      - name: Setup theme
+        run: |
+          git clone https://github.com/naro143/hugo-coder-portfolio.git themes/coder-portfolio
+          # Apply our local theme fixes
+          cd themes/coder-portfolio
+          # Fix deprecated Hugo functions
+          sed -i 's/\.Site\.IsMultiLingual/hugo.IsMultilingual/g' layouts/partials/header.html
+          sed -i 's/\.Site\.LastChange/\.Site\.Lastmod/g' layouts/partials/footer.html
+          # Add CRM info to home template
+          sed -i '/{{ \.Site\.Params\.info }}/a\    <p class="crm-info">CRM SP 173359 | RQE 140829</p>' layouts/partials/home.html
+          # Add CRM styling to CSS
+          echo '.centered .about .crm-info{margin-top:0.5rem;margin-bottom:1.0rem;font-size:1.2rem;color:#000}@media only screen and (min-device-width:320px) and (max-device-width:480px){.centered .about .crm-info{font-size:1.0rem}}' >> static/css/style.min.css
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
-      - name: Install Node.js dependencies
-        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
@@ -46,7 +58,7 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"
+            --baseURL "${{ steps.pages.outputs.base_url }}/"          
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
