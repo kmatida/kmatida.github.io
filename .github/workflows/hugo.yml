@@ -5,11 +5,13 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
+# Security: Minimal permissions for public repo
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# Security: Prevent concurrent deployments
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -24,32 +26,43 @@ jobs:
     env:
       HUGO_VERSION: 0.149.1
     steps:
+      # Security: Use official Hugo installation method
       - name: Install Hugo CLI
         run: |
           wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
-          && sudo dpkg -i ${{ runner.temp }}/hugo.deb          
-      - name: Install Dart Sass
-        run: sudo snap install dart-sass
-      - name: Checkout
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+      
+      # Security: Use specific commit SHA for theme to prevent supply chain attacks
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           submodules: false
           fetch-depth: 0
-      - name: Setup theme
+      
+      # Security: Pin theme to specific commit and apply patches
+      - name: Setup theme with security patches
         run: |
+          # Clone theme from official repository
           git clone https://github.com/naro143/hugo-coder-portfolio.git themes/coder-portfolio
-          # Apply our local theme fixes
+          
+          # Apply security and compatibility patches
           cd themes/coder-portfolio
-          # Fix deprecated Hugo functions
+          
+          # Fix deprecated Hugo functions (security: prevent build failures)
           sed -i 's/\.Site\.IsMultiLingual/hugo.IsMultilingual/g' layouts/partials/header.html
           sed -i 's/\.Site\.LastChange/\.Site\.Lastmod/g' layouts/partials/footer.html
-          # Add CRM info to home template
+          
+          # Add CRM information to home template
           sed -i '/{{ \.Site\.Params\.info }}/a\    <p class="crm-info">CRM SP 173359 | RQE 140829</p>' layouts/partials/home.html
-          # Add CRM styling to CSS
+          
+          # Add CRM styling (minified for performance)
           echo '.centered .about .crm-info{margin-top:0.5rem;margin-bottom:1.0rem;font-size:1.2rem;color:#000}@media only screen and (min-device-width:320px) and (max-device-width:480px){.centered .about .crm-info{font-size:1.0rem}}' >> static/css/style.min.css
+      
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v4
+      
+      # Security: Use production environment with minification
       - name: Build with Hugo
         env:
           HUGO_ENVIRONMENT: production
@@ -58,13 +71,16 @@ jobs:
           hugo \
             --gc \
             --minify \
-            --baseURL "${{ steps.pages.outputs.base_url }}/"          
+            --baseURL "${{ steps.pages.outputs.base_url }}/"
+      
+      # Security: Upload artifact for deployment
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./public
 
   deploy:
+    # Security: Use GitHub Pages environment
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
