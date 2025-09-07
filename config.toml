@@ -1,4 +1,4 @@
-baseurl = "https://drakarenmatida.com/" # Hostname (and path) to the root.
+baseurl = "https://kmatida.github.io/" # Hostname (and path) to the root.
 title = "Dra. Karen Tamae Matida" # Site title.
 theme = "coder-portfolio" # Set the theme.
 languagecode = "en" # The site’s language code used to generate RSS.
