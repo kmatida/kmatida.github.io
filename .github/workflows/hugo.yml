@@ -52,9 +52,8 @@ jobs:
           sed -i 's/\.Site\.IsMultiLingual/hugo.IsMultilingual/g' layouts/partials/header.html
           sed -i 's/\.Site\.LastChange/\.Site\.Lastmod/g' layouts/partials/footer.html
           
-          # Add CRM information to home template (more reliable approach)
-          sed -i 's/<h2>{{ \.Site\.Params\.info }}<\/h2>/<h2>{{ \.Site\.Params\.info }}<\/h2>\
-    <p class="crm-info">CRM SP 173359 | RQE 140829<\/p>/' layouts/partials/home.html
+          # Add CRM information to home template (using simple append after h2)
+          sed -i '/<h2>{{ \.Site\.Params\.info }}<\/h2>/a\    <p class="crm-info">CRM SP 173359 | RQE 140829</p>' layouts/partials/home.html
           
           # Add CRM styling (minified for performance)
           echo '.centered .about .crm-info{margin-top:0.5rem;margin-bottom:1.0rem;font-size:1.2rem;color:#000}@media only screen and (min-device-width:320px) and (max-device-width:480px){.centered .about .crm-info{font-size:1.0rem}}' >> static/css/style.min.css
